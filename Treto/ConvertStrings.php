@@ -1,15 +1,14 @@
 <?php
 /*
 	Interpolacja zmiennych w kodzie źródłowym na zmienne zewnętrzne.
-	v.T3.2017.09.17
+	v.T3.2017.10.17
 	- poprawa pattern
+	- example brackets: 
+		'[]', '[[]]', '{}', '{{}}', '()', '(())', '$$', '$ ', '__', '____'
 */
 namespace Treto;
 
 class ConvertStrings {
-	private $brackets = [
-		'[]', '[[]]', '{}', '{{}}', '()', '(())', '$$', '$ ', '__', '____'
-	];
 	public function interpolate($string, $data, $bracket = '[]') {
 		if(is_array($data)) {
 			$replace = [];
