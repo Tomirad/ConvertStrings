@@ -1,10 +1,11 @@
 <?php
 /*
 	Interpolacja zmiennych w kodzie źródłowym na zmienne zewnętrzne.
-	v.T3.2017.10.17
+	v.T3.2018.07.06
 	- poprawa pattern
-	- example brackets: 
+	$example_brackets = [
 		'[]', '[[]]', '{}', '{{}}', '()', '(())', '$$', '$ ', '__', '____'
+	];
 */
 namespace Treto;
 
@@ -23,18 +24,25 @@ class ConvertStrings {
 	}
 
 	public function findBrackets($string, $bracket = '[]') {
-		$b = $this->splitBracket($bracket);
-		$pattern = "/[{$b->left}](.*?)[{$b->right}]/";
+		$b = $this->splitBracket($bracket, true);
+		$pattern = "/{$b->left}(.*?){$b->right}/";
 		preg_match_all($pattern, $string, $matches);
 		return $matches[1];
 	}
 
-	private function splitBracket($bracket) {
+	private function splitBracket($brackets, $preg = false) {
 		$b = new \stdClass;
+		$bracket = '';
+		if($preg === true) {
+			foreach(str_split($brackets) as $val) {
+				$bracket .= '\\'.$val;
+			}
+		} else {
+			$bracket = $brackets;
+		}
 		$strlen = strlen($bracket);
 		$b -> left = substr($bracket, 0,$strlen/2);
 		$b -> right = substr($bracket, $strlen/2);
 		return $b;
 	}
 }
-?>
