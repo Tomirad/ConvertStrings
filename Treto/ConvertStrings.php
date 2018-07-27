@@ -1,16 +1,19 @@
 <?php
 /*
-	Interpolacja zmiennych w kodzie źródłowym na zmienne zewnętrzne.
-	v.T3.2018.07.06
-	- poprawa pattern
+	Interpolation text variable to data array or objects
+	v.T3.2018.07.27 beta
+	+ pattern correction
+	+ simple replace method - alias str_replace function
 	$example_brackets = [
 		'[]', '[[]]', '{}', '{{}}', '()', '(())', '$$', '$ ', '__', '____'
 	];
 */
-namespace Treto;
+namespace Treto\Page;
 
-class ConvertStrings {
-	public function interpolate($string, $data, $bracket = '[]') {
+class ConvertStrings
+{
+	public function interpolate($string, $data, $bracket = '[]')
+	{
 		if(is_array($data)) {
 			$replace = [];
 			$b = $this->splitBracket($bracket);
@@ -23,14 +26,21 @@ class ConvertStrings {
 		} else return $string;
 	}
 
-	public function findBrackets($string, $bracket = '[]') {
+	public function replace($string, $search, $replace)
+	{
+		return str_replace($search, $replace, $string);
+	}
+
+	public function findBrackets($string, $bracket = '[]')
+	{
 		$b = $this->splitBracket($bracket, true);
 		$pattern = "/{$b->left}(.*?){$b->right}/";
 		preg_match_all($pattern, $string, $matches);
 		return $matches[1];
 	}
 
-	private function splitBracket($brackets, $preg = false) {
+	private function splitBracket($brackets, $preg = false)
+	{
 		$b = new \stdClass;
 		$bracket = '';
 		if($preg === true) {
